@@ -1,15 +1,36 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+
 public class StringReader {
+
+    private ArrayList<String> contenido;
+
     public StringReader(String filePath) {
-        // Constructor de la clase. Aqui debe leer el archivo y almacenar todas las cadenas que contiene
+
+        contenido = new ArrayList<>();
+
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(filePath));
+            String linea;
+
+            while ((linea = reader.readLine()) != null) {
+                contenido.add(linea);
+            }
+
+            reader.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public int length() {
-        // modifique este metodo para que devuelva la cantidad correcta de cadenas a evaluar
-        return 0;
+        return contenido.size();
     }
 
     public String get(int index) {
-        // modifique este metodo para que devuelva la cadena en la posicion index
-        return "";
+        return contenido.get(index);
     }
 }
