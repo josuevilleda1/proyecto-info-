@@ -3,6 +3,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
+
 public class StringReader {
 
     private ArrayList<String> contenido;
@@ -22,7 +23,7 @@ public class StringReader {
             reader.close();
 
         } catch (IOException e) {
-            e.printStackTrace();
+            
         }
     }
 
@@ -32,5 +33,9 @@ public class StringReader {
 
     public String get(int index) {
         return contenido.get(index);
+    }
+
+    public ArrayList<String> Contenido (){
+        return contenido;
     }
 }
