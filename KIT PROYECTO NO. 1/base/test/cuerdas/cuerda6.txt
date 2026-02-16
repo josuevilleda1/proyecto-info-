@@ -1,0 +1,4 @@
+z,y,x,w
+zyxw
+zyx
+w
