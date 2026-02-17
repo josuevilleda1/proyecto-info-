@@ -28,5 +28,4 @@ public class Node<N>{
         this.hd = s;
     }
 
-
 }

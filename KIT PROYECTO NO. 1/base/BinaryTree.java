@@ -8,18 +8,21 @@ public class BinaryTree {
     ArrayList<Node> aux = new ArrayList<>();//Lista auxiliar para guardar nodos que aun pueden tener hijos
     int i = 0;
     ArrayList<Node> imprimir = new ArrayList<>();//arbol binario resultante
+    private Node root; //Etsa variable nos ayudara a guardar quien es la raiz 
+
 
     public BinaryTree(String filePath) {
         // Constructor de la clase. Aqui debes leer el archivo y construir tu arbol binario
         StringReader Nodo = new StringReader(filePath); //lee el archivo
         palabra = Nodo.Contenido(); //obtiene el archivo en formato de ArrayList
         //Tokeniza cada linea para encontrar los nodos
-              for(int i = 0; i<palabra.size(); i++){
+              for(int i = 1; i<palabra.size(); i++){ 
             String linea = palabra.get(i);
             String [] nueva = linea.split("\\|");
             for (int j=0; j<nueva.length;j++){//recorre mi arreglo de nodo x para crear el nodo.
                 if(aux.isEmpty()){//Si es el primer nodo, lo crea como nodo raiz.
                     Node nodo = new Node(null, nueva[j].charAt(0), null, null,nueva[j].charAt(2),nueva[j].charAt(4));
+                    this.root = nodo;
                     aux.add(nodo);
                     imprimir.add(nodo);}
                 else{
@@ -52,15 +55,45 @@ public class BinaryTree {
 
                     }
                 }
-       // System.out.println(palabra); //se usa momentaneamente para los test personales que hacemos 
+        System.out.println(palabra); //se usa momentaneamente para los test personales que hacemos 
         abdcdario = palabra.get(0);
-        //System.out.println("lectura del abcdario"+ abdcdario); //se usa momentaneamente para los test personales que hacemos 
+        System.out.println("lectura del abcdario"+ abdcdario); //se usa momentaneamente para los test personales que hacemos 
 
+    }
+    /*Etse metodo solo nos devolvera cual es la raiz del arbol, esto nos ayudar a poder usar el caso recursvo para poder buscar */
+    public Node getRoot(){
+        return this.root;
+    }
+
+    public ArrayList<Node> arbolArmado(){
+        return this.imprimir;
     }
             
 
     public boolean contains_string(String string) {
-        // Evalua si un arbol contiene otro sub arbol que pueda generar la cadena proporcionada
-        return false;
+//lamba es un sub arbol tecnicmanete entonces si la palabra no es nada cuenta jajaja 
+        if (string == null || string.isEmpty()) return true; 
+        return Buscador(this.root, string, 0);
     }
+
+    private boolean Buscador(Node actual, String palabra, int indice) {
+        /*
+        esta recursion tiene 3 casos 
+        el caso base ->> el cual los ultimos nodos que se buscaron ya no hay hijos y no se encontro la plabara si esto pasa es un false
+        2 casos inductivos 
+        1 : se encontro el camino y encontro toda la palabra donde aqui va moviendo indice por indice del sub arbol para encontrar todo 
+        2 : donde solo se encontro parcialemnte se vulve a reinicar el indice a 0 
+          */
+        if (actual == null) return false;
+        if (actual.dato == palabra.charAt(indice)) {
+            if (indice == palabra.length() - 1) return true;
+            if (Buscador(actual.left, palabra, indice + 1) || Buscador(actual.right, palabra, indice + 1)) return true;
+        }
+        if(indice == 0) {
+            return Buscador(actual.left, palabra, 0) || Buscador(actual.right, palabra, 0);
+        }
+        return false;
+    }    
 }
+
+
