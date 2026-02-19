@@ -1,7 +1,5 @@
 import java.util.ArrayList;
 
-import javax.print.DocFlavor.STRING;
-
 public class BinaryTree {
     private String abdcdario;
     private ArrayList<String> palabra;
@@ -17,49 +15,51 @@ public class BinaryTree {
         palabra = Nodo.Contenido(); //obtiene el archivo en formato de ArrayList
         //Tokeniza cada linea para encontrar los nodos
               for(int i = 1; i<palabra.size(); i++){ 
-            String linea = palabra.get(i);
+            String linea = palabra.get(i).trim(); // Limpiamos espacios para evitar errores de lectura
+            if(linea.isEmpty()) continue; // Si la linea esta vacia, saltamos para no contar de mas
             String [] nueva = linea.split("\\|");
             for (int j=0; j<nueva.length;j++){//recorre mi arreglo de nodo x para crear el nodo.
-                if(aux.isEmpty()){//Si es el primer nodo, lo crea como nodo raiz.
+                
+                // CORRECCION: Usamos this.root para verificar existencia, no aux.isEmpty()
+                if(this.root == null){ //Si es el primer nodo, lo crea como nodo raiz.
                     Node nodo = new Node(null, nueva[j].charAt(0), null, null,nueva[j].charAt(2),nueva[j].charAt(4));
                     this.root = nodo;
                     aux.add(nodo);
-                    imprimir.add(nodo);}
+                    imprimir.add(nodo);
+                }
                 else{
                     while(true){
-                    if(aux.isEmpty()){
-                        break;
-                    }
-                    Node nodo_anterior = aux.get(0);//Extraemos el nodo anterior de al lista aux
-                    if(nodo_anterior.hz == '1'){//Evaluamos si posee un hijo a la izquierda para crear el nuevo nodo
-                        Node nodo = new Node(nodo_anterior, nueva[j].charAt(0), null, null,nueva[j].charAt(2),nueva[j].charAt(4));
-                        nodo_anterior.left = nodo;
-                        nodo_anterior.getChangeI('0');
-                        aux.add(nodo);
-                        imprimir.add(nodo);
-                        break;}
+                        if(aux.isEmpty()){
+                            break;
+                        }
+                        Node nodo_anterior = aux.get(0);//Extraemos el nodo anterior de al lista aux
+                        if(nodo_anterior.hz == '1'){//Evaluamos si posee un hijo a la izquierda para crear el nuevo nodo
+                            Node nodo = new Node(nodo_anterior, nueva[j].charAt(0), null, null,nueva[j].charAt(2),nueva[j].charAt(4));
+                            nodo_anterior.left = nodo;
+                            nodo_anterior.getChangeI('0');
+                            aux.add(nodo);
+                            imprimir.add(nodo);
+                            break;
+                        }
 
-                    else if(nodo_anterior.hd == '1'){//Evaluamos si posee hijo a la derecha para crear nuevo nodo.
-                        Node nodo = new Node(nodo_anterior, nueva[j].charAt(0), null, null,nueva[j].charAt(2),nueva[j].charAt(4));
-                        nodo_anterior.right = nodo;
-                        nodo_anterior.getChangeD('0');
-                        aux.add(nodo);
-                        imprimir.add(nodo);
-                        break;}
-                    else{
-                        aux.remove(0);//elimina a un nodo de auxiliar si ya no tiene oportunidades de hijos.
-                    }
-                    }
-
-                    }
-
+                        else if(nodo_anterior.hd == '1'){//Evaluamos si posee hijo a la derecha para crear nuevo nodo.
+                            Node nodo = new Node(nodo_anterior, nueva[j].charAt(0), null, null,nueva[j].charAt(2),nueva[j].charAt(4));
+                            nodo_anterior.right = nodo;
+                            nodo_anterior.getChangeD('0');
+                            aux.add(nodo);
+                            imprimir.add(nodo);
+                            break;
+                        }
+                        else{
+                            aux.remove(0);//elimina a un nodo de auxiliar si ya no tiene oportunidades de hijos.
+                        }
                     }
                 }
-        System.out.println(palabra); //se usa momentaneamente para los test personales que hacemos 
+            }
+        }
         abdcdario = palabra.get(0);
-        System.out.println("lectura del abcdario"+ abdcdario); //se usa momentaneamente para los test personales que hacemos 
-
     }
+
     /*Etse metodo solo nos devolvera cual es la raiz del arbol, esto nos ayudar a poder usar el caso recursvo para poder buscar */
     public Node getRoot(){
         return this.root;
@@ -71,19 +71,12 @@ public class BinaryTree {
             
 
     public boolean contains_string(String string) {
-//lamba es un sub arbol tecnicmanete entonces si la palabra no es nada cuenta jajaja 
+        //lamba es un sub arbol tecnicmanete entonces si la palabra no es nada cuenta jajaja 
         if (string == null || string.isEmpty()) return true; 
         return Buscador(this.root, string, 0);
     }
 
     private boolean Buscador(Node actual, String palabra, int indice) {
-        /*
-        esta recursion tiene 3 casos 
-        el caso base ->> el cual los ultimos nodos que se buscaron ya no hay hijos y no se encontro la plabara si esto pasa es un false
-        2 casos inductivos 
-        1 : se encontro el camino y encontro toda la palabra donde aqui va moviendo indice por indice del sub arbol para encontrar todo 
-        2 : donde solo se encontro parcialemnte se vulve a reinicar el indice a 0 
-          */
         if (actual == null) return false;
         if (actual.dato == palabra.charAt(indice)) {
             if (indice == palabra.length() - 1) return true;
@@ -95,5 +88,3 @@ public class BinaryTree {
         return false;
     }    
 }
-
-
